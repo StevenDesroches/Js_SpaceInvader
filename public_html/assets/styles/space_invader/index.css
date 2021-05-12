@@ -1,0 +1,9 @@
+.space_invader_init {
+    position: relative;
+}
+
+.space_invader_init > canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
