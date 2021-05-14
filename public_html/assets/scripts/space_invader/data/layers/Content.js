@@ -1,6 +1,8 @@
 import {Layer} from "./Layer.js";
 import {BoundingBox} from "../components/index.js";
 import {Player, Projectile, Enemy} from "../entities/index.js";
+import * as GeneralUtil from "../../utils/GeneralUtil.js";
+
 /**
  * TODO: refactor this whole file, i shouldnt handle all the animation here
  * 
@@ -15,6 +17,7 @@ export class Content extends Layer {
     //_playerEntities;
     _player;
     _playerProjectiles;
+    _enemyProjectiles
 
     _layerBoundingBox;
 
@@ -23,6 +26,7 @@ export class Content extends Layer {
     constructor(canvas) {
         super(canvas);
 
+        this._enemyProjectiles = [];
         this._playerProjectiles = [];
         this._enemeyVelocity = {x: 2.5, y: 0};
 
@@ -44,14 +48,14 @@ export class Content extends Layer {
         this._player = new Player(boundingBoxWidth / 2, (playerHeight + shieldHeight + ennemiesHeight), 50, 20, "green", {x: 0, y: 0});
         this._player.animate(this.context);
 
-        let heightPoints = generalUtil.getEquallySpacedPointsOnlenght(ennemiesHeight, 7);
+        let heightPoints = GeneralUtil.getEquallySpacedPointsOnlenght(ennemiesHeight, 7);
         //heightPoints.shift();
         heightPoints.pop();
         heightPoints.pop();
 
         for (let heightPoint of heightPoints) {
             let currentLine = [];
-            let widthPoints = generalUtil.getEquallySpacedPointsOnlenght(boundingBoxWidth, 11);
+            let widthPoints = GeneralUtil.getEquallySpacedPointsOnlenght(boundingBoxWidth, 11);
             widthPoints.shift();
             widthPoints.pop();
             for (let point of widthPoints) {
@@ -137,14 +141,14 @@ export class Content extends Layer {
         //TODO move that bit of logic in a function (and do better)
 //        if (!this._player.getBoundingBox().isInBox(this._playerBoundingBox)) {
 //            console.log('ici');
-            if (this._player.getBoundingBox().getX() < this._playerBoundingBox.getX()) {
-                this._player.getBoundingBox().setX(this._playerBoundingBox.getX());
-                this._player.setVelocity({x: 0});
-            }
-            if (this._player.getBoundingBox().getX2() > this._playerBoundingBox.getX2()) {
-                this._player.getBoundingBox().setX((this._playerBoundingBox.getX2() - this._player.getBoundingBox().getWidth()));
-                this._player.setVelocity({x: 0});
-            }
+        if (this._player.getBoundingBox().getX() < this._playerBoundingBox.getX()) {
+            this._player.getBoundingBox().setX(this._playerBoundingBox.getX());
+            this._player.setVelocity({x: 0});
+        }
+        if (this._player.getBoundingBox().getX2() > this._playerBoundingBox.getX2()) {
+            this._player.getBoundingBox().setX((this._playerBoundingBox.getX2() - this._player.getBoundingBox().getWidth()));
+            this._player.setVelocity({x: 0});
+        }
 //            this._player.setVelocity({x: 0});
 //        }
         this._player.reduceVelocity({x: 0.95});
