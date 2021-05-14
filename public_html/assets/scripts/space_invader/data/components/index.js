@@ -1,3 +1,3 @@
 export * from "./BoundingBox.js";
-//export * from "./Velocity.js";
+export * from "./Cooldown.js";
 export * from "./Control.js";
