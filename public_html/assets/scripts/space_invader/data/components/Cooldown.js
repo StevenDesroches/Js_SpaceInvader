@@ -5,9 +5,11 @@
 export class Cooldown {
     _array;
     millis;
-    constructor(millis = 500) {
+    random;
+    constructor(millis = 500, random = false) {
         this._array = [];
         this.millis = millis;
+        this.random = random;
     }
 
     isReady(key) {
@@ -19,7 +21,8 @@ export class Cooldown {
     }
 
     _applyCooldown(key) {
-        this._array[key] = Date.now() + this.millis;
+        let time = (this.random) ? Math.random() * this.millis : this.millis;
+        this._array[key] = Date.now() + time;
     }
 
 }

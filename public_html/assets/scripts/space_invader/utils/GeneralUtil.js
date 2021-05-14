@@ -10,3 +10,7 @@ export function getEquallySpacedPointsOnlenght(len, nbrs) {
     }
     return result;
 }
+
+export function getRandomItemInArray(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
