@@ -1,12 +1,17 @@
 import {Layer} from "./Layer.js";
+import {Star} from "./background//Star.js";
 /*
  * 
  */
 export class Background extends Layer {
+    stars;
+
     constructor(canvas) {
         super(canvas);
-//        this.context.fillStyle = "black";
-//        this.context.fillRect(0, 0, this.width, this.height);
+        this.stars = [];
+        for (var i = 0; i < 500; i++) {
+            this.stars.push(new Star(this.width, this.height));
+        }
         this._draw();
     }
 
@@ -15,20 +20,15 @@ export class Background extends Layer {
     }
 
     _draw() {
-        this.context.clearRect(0, 0, this.width, this.height)
-        for (var i = 0; i < 500; i++) {
-            let x = Math.random() * this.width;
-            let y = Math.random() * this.height;
-            let intensity = Math.random() * 255;
-            let rgb = "rgb(" + intensity + "," + intensity + "," + intensity + ")";
-            this.context.fillStyle = rgb;
-            this.context.fillRect(x, y, 1, 1);
-
+        this.context.clearRect(0, 0, this.width, this.height);
+        //console.log(this.stars);
+        for (let i = 0; i < this.stars.length; i++) {
+            this.stars[i].animate(this.context);
         }
     }
 
     animate() {
-        //this._draw();
+        this._draw();
     }
 
 }

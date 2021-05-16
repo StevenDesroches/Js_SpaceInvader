@@ -1,13 +1,15 @@
+import {Cooldown} from "./Cooldown.js";
+
 /**
  * 
  * @type type
  */
 export class Control {
-    _pressedKeys
-    _cooldownKeys
+    _pressedKeys;
+    _cooldownKeys;
     constructor() {
         this._pressedKeys = [];
-        this._cooldownKeys = [];
+        this._cooldownKeys = new Cooldown();
     }
 
     update(event) {
@@ -40,21 +42,9 @@ export class Control {
 
     isShooting() {
         if (this._pressedKeys[32])//spacebar
-            if (this._isReady(32))
+            if (this._cooldownKeys.isReady(32))
                 return true;
         return false;
-    }
-
-    _isReady(key) {
-        if (this._cooldownKeys[key] <= Date.now() || !this._cooldownKeys[key]) {
-            this._applyCooldown(key, 500);
-            return true;
-        }
-        return false;
-    }
-
-    _applyCooldown(key, millis) {
-        this._cooldownKeys[key] = Date.now() + millis;
     }
 
 }
