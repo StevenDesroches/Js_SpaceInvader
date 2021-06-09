@@ -28,6 +28,8 @@ export class SpaceInvaderCore {
         }
         if (this._userInterface && this._content && this._background)
             this._eventsHandler = new EventsHandler(this._background, this._content, this._userInterface);
+        
+         this._content.context.canvas.focus();
     }
 
     animate() {
