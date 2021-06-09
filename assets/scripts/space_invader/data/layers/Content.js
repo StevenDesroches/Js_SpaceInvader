@@ -1,5 +1,5 @@
 import {Layer} from "./Layer.js";
-import {BoundingBox, Cooldown} from "../components/index.js";
+import {BoundingBox, Cooldown, GameState} from "../components/index.js";
 import {Player, Projectile, Enemy} from "../entities/index.js";
 import * as GeneralUtil from "../../utils/GeneralUtil.js";
 
@@ -24,9 +24,12 @@ export class Content extends Layer {
 
     _enemeyVelocity;
 
+    gameState;
+
     constructor(canvas) {
         super(canvas);
 
+        this.gameState = new GameState();
         this._enemyCooldown = new Cooldown(1000, true);
         this._enemyProjectiles = [];
         this._playerProjectiles = [];
@@ -99,6 +102,9 @@ export class Content extends Layer {
 
     animate() {
         //this._draw();
+        if (!this.gameState.isRunning())
+            return;
+
         this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
         if (this._player.isShooting()) {
             let center = this._player.getBoundingBox().getCenter();
@@ -124,8 +130,8 @@ export class Content extends Layer {
             for (let i = 0; i < this._enemyProjectiles.length; i++) {
                 this._enemyProjectiles[i].animate(this.context);
                 if (this._enemyProjectiles[i].getBoundingBox().isTouchingBox(this._playerBoundingBox)) {
-                    if(this._enemyProjectiles[i].getBoundingBox().isTouchingBox(this._player.getBoundingBox())){
-                        this._player = null;
+                    if (this._enemyProjectiles[i].getBoundingBox().isTouchingBox(this._player.getBoundingBox())) {
+                        this.gameState.end();
                     }
                 }
                 if (!this._enemyProjectiles[i].getBoundingBox().isTouchingBox(this._layerBoundingBox)) {
@@ -197,6 +203,10 @@ export class Content extends Layer {
         this._player.reduceVelocity({x: 0.95});
 
         this._player.animate(this.context);
+
+        if (this.gameState.isGameDone()){
+            this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+        }
     }
 
     _draw() {
